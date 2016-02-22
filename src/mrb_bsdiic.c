@@ -72,7 +72,7 @@ void mrb_mruby_bsdiic_gem_init(mrb_state *mrb)
     struct RClass *bsdiic;
     bsdiic = mrb_define_class(mrb, "BsdIic", mrb->object_class);
     mrb_define_method(mrb, bsdiic, "initialize", mrb_bsdiic_init, MRB_ARGS_REQ(1));
-    mrb_define_class_method(mrb, bsdiic, "read", mrb_bsdiic_read, MRB_ARGS_REQ(2));
+    mrb_define_method(mrb, bsdiic, "read", mrb_bsdiic_read, MRB_ARGS_REQ(2));
     DONE;
 }
 
