@@ -58,11 +58,20 @@ static mrb_value mrb_bsdiic_read(mrb_state *mrb, mrb_value self)
   mrb_get_args(mrb, "ii", &addr, &reg);
 
   cmd.slave = addr;
+  error = ioctl(data->fd, I2CSTART, &cmd);
   cmd.count = 1;
   cmd.last = 0;
+  cmdbuf = 0;
   cmd.buf = &cmdbuf;
-  error = ioctl(data->fd, I2CSTART, &cmd);
+  error = ioctl(data->fd, I2CWRITE, &cmd);
+  cmd.slave = addr;
   error = ioctl(data->fd, I2CSTOP, &cmd);
+
+  cmd.slave = addr;
+  error = ioctl(data->fd, I2CSTART, &cmd);
+  cmd.slave = addr;
+  error = ioctl(data->fd, I2CSTOP, &cmd);
+  error = read(data->fd, &cmdbuf, 1);
   error = read(data->fd, &cmdbuf, 1);
   return mrb_fixnum_value(cmdbuf);
 }
