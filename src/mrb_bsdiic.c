@@ -64,7 +64,8 @@ static mrb_value mrb_bsdiic_read(mrb_state *mrb, mrb_value self)
   error = ioctl(data->fd, I2CSTART, &cmd);
   error = ioctl(data->fd, I2CREAD, &cmd);
   error = ioctl(data->fd, I2CSTOP);
-  return mrb_fixnum_value(cmdbuf);
+//  return mrb_fixnum_value(cmdbuf);
+  return mrb_fixnum_value(data->fd);
 }
 
 void mrb_mruby_bsdiic_gem_init(mrb_state *mrb)
