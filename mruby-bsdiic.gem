@@ -1,0 +1,6 @@
+name: mruby-bsdiic
+description: BsdIic class
+author: Hiroki Mori
+website: https://github.com/yamori813/mruby-bsdiic
+protocol: git
+repository: https://github.com/yamori813/mruby-bsdiic.git
