@@ -13,13 +13,9 @@ end
 ```
 ## example
 ```ruby
-p BsdIic.hi
-#=> "hi!!"
-t = BsdIic.new "hello"
-p t.hello
-#=> "hello"
-p t.bye
-#=> "hello bye"
+t = BsdIic.new(0)
+p t.read(0, 0)
+#=> 0
 ```
 
 ## License
