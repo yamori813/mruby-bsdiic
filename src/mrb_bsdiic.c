@@ -40,7 +40,7 @@ static mrb_value mrb_bsdiic_init(mrb_state *mrb, mrb_value self)
 
   mrb_get_args(mrb, "i", &num);
   data = (mrb_bsdiic_data *)mrb_malloc(mrb, sizeof(mrb_bsdiic_data));
-  snprintf(device, sizeof(device), "/dev/iicc%u", num);
+  snprintf(device, sizeof(device), "/dev/iic%u", num);
   data->fd = open(device, O_RDWR); 
   DATA_PTR(self) = data;
 
@@ -63,7 +63,7 @@ static mrb_value mrb_bsdiic_read(mrb_state *mrb, mrb_value self)
   cmd.buf = &cmdbuf;
   error = ioctl(data->fd, I2CSTART, &cmd);
   error = ioctl(data->fd, I2CREAD, &cmd);
-  error = ioctl(data->fd, I2CSTOP, &cmd);
+  error = ioctl(data->fd, I2CSTOP);
   return mrb_fixnum_value(cmdbuf);
 }
 
