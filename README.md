@@ -14,8 +14,8 @@ end
 ## example
 ```ruby
 t = BsdIic.new(0)
-p t.read(0, 0)
-#=> 0
+p t.read(0x50,2)
+#=> 32
 ```
 
 ## License

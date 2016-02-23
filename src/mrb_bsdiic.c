@@ -10,8 +10,16 @@
 #include "mruby/data.h"
 #include "mrb_bsdiic.h"
 
+#include <err.h>
+#include <errno.h>
+#include <sysexits.h>
 #include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdarg.h>
 #include <unistd.h>
+#include <sys/ioctl.h>
 
 #include <dev/iicbus/iic.h>
 
@@ -53,23 +61,25 @@ static mrb_value mrb_bsdiic_read(mrb_state *mrb, mrb_value self)
   mrb_int addr, reg;
   struct iiccmd cmd;
   int error;
-  char cmdbuf;
+  char cmdbuf = 0;
 
   mrb_get_args(mrb, "ii", &addr, &reg);
 
-  cmd.slave = addr;
-  error = ioctl(data->fd, I2CSTART, &cmd);
+  bzero(&cmd, sizeof(cmd));
+  cmd.slave = addr << 1;
   cmd.count = 1;
   cmd.last = 0;
-  cmdbuf = 1;
   cmd.buf = &cmdbuf;
+  cmdbuf = reg;
+  error = ioctl(data->fd, I2CSTART, &cmd);
   error = ioctl(data->fd, I2CWRITE, &cmd);
   error = ioctl(data->fd, I2CSTOP);
 
-  cmd.slave = addr;
+  cmd.slave = addr << 1;
   error = ioctl(data->fd, I2CSTART, &cmd);
   error = ioctl(data->fd, I2CSTOP);
   error = read(data->fd, &cmdbuf, 1);
+
   return mrb_fixnum_value(cmdbuf);
 }
 
