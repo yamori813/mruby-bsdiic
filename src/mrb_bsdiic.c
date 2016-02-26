@@ -83,12 +83,37 @@ static mrb_value mrb_bsdiic_read(mrb_state *mrb, mrb_value self)
   return mrb_fixnum_value(cmdbuf);
 }
 
+static mrb_value mrb_bsdiic_write(mrb_state *mrb, mrb_value self)
+{
+  mrb_bsdiic_data *data = DATA_PTR(self);
+  mrb_int addr, reg, val;
+  struct iiccmd cmd;
+  int error;
+  char cmdbufi[2];
+
+  mrb_get_args(mrb, "iii", &addr, &reg, &val);
+
+  bzero(&cmd, sizeof(cmd));
+  cmd.slave = addr << 1;
+  cmd.count = 2;
+  cmd.last = 0;
+  cmd.buf = &cmdbuf;
+  cmdbuf[0] = reg;
+  cmdbuf[1] = val;
+  error = ioctl(data->fd, I2CSTART, &cmd);
+  error = ioctl(data->fd, I2CWRITE, &cmd);
+  error = ioctl(data->fd, I2CSTOP);
+
+  return mrb_fixnum_value(0);
+}
+
 void mrb_mruby_bsdiic_gem_init(mrb_state *mrb)
 {
     struct RClass *bsdiic;
     bsdiic = mrb_define_class(mrb, "BsdIic", mrb->object_class);
     mrb_define_method(mrb, bsdiic, "initialize", mrb_bsdiic_init, MRB_ARGS_REQ(1));
     mrb_define_method(mrb, bsdiic, "read", mrb_bsdiic_read, MRB_ARGS_REQ(2));
+    mrb_define_method(mrb, bsdiic, "write", mrb_bsdiic_write, MRB_ARGS_REQ(3));
     DONE;
 }
 
