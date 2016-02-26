@@ -89,7 +89,7 @@ static mrb_value mrb_bsdiic_write(mrb_state *mrb, mrb_value self)
   mrb_int addr, reg, val;
   struct iiccmd cmd;
   int error;
-  char cmdbufi[2];
+  char cmdbuf[2];
 
   mrb_get_args(mrb, "iii", &addr, &reg, &val);
 
