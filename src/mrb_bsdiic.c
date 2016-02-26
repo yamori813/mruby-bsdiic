@@ -97,7 +97,7 @@ static mrb_value mrb_bsdiic_write(mrb_state *mrb, mrb_value self)
   cmd.slave = addr << 1;
   cmd.count = 2;
   cmd.last = 0;
-  cmd.buf = &cmdbuf;
+  cmd.buf = cmdbuf;
   cmdbuf[0] = reg;
   cmdbuf[1] = val;
   error = ioctl(data->fd, I2CSTART, &cmd);
