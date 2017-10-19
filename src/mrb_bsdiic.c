@@ -59,12 +59,34 @@ static mrb_value mrb_bsdiic_read(mrb_state *mrb, mrb_value self)
 {
   mrb_bsdiic_data *data = DATA_PTR(self);
   mrb_int addr, reg;
+#ifdef USE_RDWR
+  struct iic_msg msg[2];
+  struct iic_rdwr_data rdwr;
+  char rdbuf;
+#else
   struct iiccmd cmd;
+#endif
   int error;
   char cmdbuf = 0;
 
   mrb_get_args(mrb, "ii", &addr, &reg);
 
+#ifdef USE_RDWR
+  cmdbuf = reg;
+  msg[0].slave = addr << 1;
+  msg[0].flags = IIC_M_WR;
+  msg[0].len = sizeof( cmdbuf );
+  msg[0].buf = &cmdbuf; 
+  msg[1].slave = addr << 1;
+  msg[1].flags = IIC_M_RD;
+  msg[1].len = sizeof( rdbuf );
+  msg[1].buf = &rdbuf; 
+  rdwr.msgs = msg;
+  rdwr.nmsgs = 2;
+  error = ioctl(data->fd, I2CRDWR, &rdwr);
+
+  return mrb_fixnum_value(rdbuf);
+#else
   bzero(&cmd, sizeof(cmd));
   cmd.slave = addr << 1;
   cmd.count = 1;
@@ -81,18 +103,35 @@ static mrb_value mrb_bsdiic_read(mrb_state *mrb, mrb_value self)
   error = read(data->fd, &cmdbuf, 1);
 
   return mrb_fixnum_value(cmdbuf);
+#endif
 }
 
 static mrb_value mrb_bsdiic_write(mrb_state *mrb, mrb_value self)
 {
   mrb_bsdiic_data *data = DATA_PTR(self);
   mrb_int addr, reg, val;
+#ifdef USE_RDWR
+  struct iic_msg msg;
+  struct iic_rdwr_data rdwr;
+#else
   struct iiccmd cmd;
+#endif
   int error;
   char cmdbuf[2];
 
   mrb_get_args(mrb, "iii", &addr, &reg, &val);
 
+#ifdef USE_RDWR
+  msg.slave = addr << 1;
+  msg.flags = IIC_M_WR;
+  msg.len = sizeof( cmdbuf );
+  cmdbuf[0] = reg;
+  cmdbuf[1] = val;
+  msg.buf = &cmdbuf; 
+  rdwr.msgs = &msg;
+  rdwr.nmsgs = 1;
+  error = ioctl(data->fd, I2CRDWR, &rdwr);
+#else
   bzero(&cmd, sizeof(cmd));
   cmd.slave = addr << 1;
   cmd.count = 2;
@@ -103,6 +142,7 @@ static mrb_value mrb_bsdiic_write(mrb_state *mrb, mrb_value self)
   error = ioctl(data->fd, I2CSTART, &cmd);
   error = ioctl(data->fd, I2CWRITE, &cmd);
   error = ioctl(data->fd, I2CSTOP);
+#endif
 
   return mrb_fixnum_value(0);
 }
