@@ -8,6 +8,7 @@
 
 #include "mruby.h"
 #include "mruby/data.h"
+#include "mruby/array.h"
 #include "mrb_bsdiic.h"
 
 #include <err.h>
@@ -147,6 +148,53 @@ static mrb_value mrb_bsdiic_write(mrb_state *mrb, mrb_value self)
   return mrb_fixnum_value(0);
 }
 
+static mrb_value mrb_bsdiic_writes(mrb_state *mrb, mrb_value self)
+{
+  mrb_bsdiic_data *data = DATA_PTR(self);
+  mrb_int addr;
+  mrb_value arr;
+  int len;
+#ifdef USE_RDWR
+  struct iic_msg msg;
+  struct iic_rdwr_data rdwr;
+#else
+  struct iiccmd cmd;
+#endif
+  int error;
+  char cmdbuf[MAX_WRITES_SIZE];
+  int i;
+
+  mrb_get_args(mrb, "iA", &addr, &arr);
+  len = RARRAY_LEN( arr );
+
+  if(len < MAX_WRITES_SIZE) {
+#ifdef USE_RDWR
+    msg.slave = addr << 1;
+    msg.flags = IIC_M_WR;
+    msg.len = len;
+    for (i = 0; i < len; ++i)
+      cmdbuf[i] = mrb_fixnum( mrb_ary_ref( mrb, arr, i ) );
+    msg.buf = &cmdbuf; 
+    rdwr.msgs = &msg;
+    rdwr.nmsgs = 1;
+    error = ioctl(data->fd, I2CRDWR, &rdwr);
+#else
+    bzero(&cmd, sizeof(cmd));
+    cmd.slave = addr << 1;
+    cmd.count = len;
+    cmd.last = 0;
+    cmd.buf = cmdbuf;
+    for (i = 0; i < len; ++i)
+      cmdbuf[i] = mrb_fixnum( mrb_ary_ref( mrb, arr, i ) );
+    error = ioctl(data->fd, I2CSTART, &cmd);
+    error = ioctl(data->fd, I2CWRITE, &cmd);
+    error = ioctl(data->fd, I2CSTOP);
+#endif
+  }
+
+  return mrb_fixnum_value(0);
+}
+
 void mrb_mruby_bsdiic_gem_init(mrb_state *mrb)
 {
     struct RClass *bsdiic;
@@ -154,6 +202,7 @@ void mrb_mruby_bsdiic_gem_init(mrb_state *mrb)
     mrb_define_method(mrb, bsdiic, "initialize", mrb_bsdiic_init, MRB_ARGS_REQ(1));
     mrb_define_method(mrb, bsdiic, "read", mrb_bsdiic_read, MRB_ARGS_REQ(2));
     mrb_define_method(mrb, bsdiic, "write", mrb_bsdiic_write, MRB_ARGS_REQ(3));
+    mrb_define_method(mrb, bsdiic, "writes", mrb_bsdiic_writes, MRB_ARGS_REQ(2));
     DONE;
 }
 
