@@ -1,11 +1,16 @@
 # mruby-bsdiic   [![Build Status](https://travis-ci.org/yamori813/mruby-bsdiic.svg?branch=master)](https://travis-ci.org/yamori813/mruby-bsdiic)
 BsdIic class
 
-only support one byte register address and one byte data format.
+This is FreeBSD iic support class
+
+support one byte register address and one byte data access and array data
+send.
 
 read(device address, register address)
 
 write(device address, register address, data)
+
+writes(device address, data array)
 ## install by mrbgems
 - add conf.gem line to `build_config.rb`
 
