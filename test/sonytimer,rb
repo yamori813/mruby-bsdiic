@@ -1,0 +1,17 @@
+#!/usr/local/bin/mruby
+# SONY PT-D4W power unit control
+
+t = BsdIic.new(0)
+
+if ARGV[0] == 'aon'
+  t.write(4, [0x33, 0x02, 0x30])
+elsif ARGV[0] == 'aoff'
+  t.write(4, [0x33, 0x82, 0x30])
+elsif ARGV[0] == 'bon'
+  t.write(4, [0x33, 0x42, 0x30])
+elsif ARGV[0] == 'boff'
+  t.write(4, [0x33, 0xc2, 0x30])
+else
+  p "param not found"
+end
+
