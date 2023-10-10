@@ -160,7 +160,7 @@ static mrb_value mrb_bsdiic_write(mrb_state *mrb, mrb_value self)
 #ifdef USE_RDWR
   msg.slave = addr << 1;
   msg.flags = IIC_M_WR;
-  msg.len = sizeof( cmdbuf );
+  msg.len = 2;
   cmdbuf[0] = reg;
   cmdbuf[1] = val;
   msg.buf = &cmdbuf; 
