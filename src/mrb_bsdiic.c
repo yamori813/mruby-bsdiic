@@ -153,34 +153,35 @@ static mrb_value mrb_bsdiic_write(mrb_state *mrb, mrb_value self)
     }
 
     return mrb_fixnum_value(0);
-  }
+  } else {
 
-  mrb_get_args(mrb, "iii", &addr, &reg, &val);
+    mrb_get_args(mrb, "iii", &addr, &reg, &val);
 
 #ifdef USE_RDWR
-  msg.slave = addr << 1;
-  msg.flags = IIC_M_WR;
-  msg.len = 2;
-  cmdbuf[0] = reg;
-  cmdbuf[1] = val;
-  msg.buf = &cmdbuf; 
-  rdwr.msgs = &msg;
-  rdwr.nmsgs = 1;
-  error = ioctl(data->fd, I2CRDWR, &rdwr);
+    msg.slave = addr << 1;
+    msg.flags = IIC_M_WR;
+    msg.len = 2;
+    cmdbuf[0] = reg;
+    cmdbuf[1] = val;
+    msg.buf = &cmdbuf;
+    rdwr.msgs = &msg;
+    rdwr.nmsgs = 1;
+    error = ioctl(data->fd, I2CRDWR, &rdwr);
 #else
-  bzero(&cmd, sizeof(cmd));
-  cmd.slave = addr << 1;
-  cmd.count = 2;
-  cmd.last = 0;
-  cmd.buf = cmdbuf;
-  cmdbuf[0] = reg;
-  cmdbuf[1] = val;
-  error = ioctl(data->fd, I2CSTART, &cmd);
-  error = ioctl(data->fd, I2CWRITE, &cmd);
-  error = ioctl(data->fd, I2CSTOP);
+    bzero(&cmd, sizeof(cmd));
+    cmd.slave = addr << 1;
+    cmd.count = 2;
+    cmd.last = 0;
+    cmd.buf = cmdbuf;
+    cmdbuf[0] = reg;
+    cmdbuf[1] = val;
+    error = ioctl(data->fd, I2CSTART, &cmd);
+    error = ioctl(data->fd, I2CWRITE, &cmd);
+    error = ioctl(data->fd, I2CSTOP);
 #endif
 
-  return mrb_fixnum_value(0);
+    return mrb_fixnum_value(0);
+  }
 }
 
 void mrb_mruby_bsdiic_gem_init(mrb_state *mrb)
