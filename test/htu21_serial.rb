@@ -12,9 +12,9 @@ def htu21_crc_check value, crc
       result = ((result ^ polynom) & mask) | ( result & ~mask)
     end
     # Shift by one
-    msb >>= 1;
-    mask >>= 1;
-    polynom >>=1;
+    msb >>= 1
+    mask >>= 1
+    polynom >>=1
   end
   result == crc
 end
