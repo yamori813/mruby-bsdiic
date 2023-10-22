@@ -64,12 +64,12 @@ static mrb_value mrb_bsdiic_read(mrb_state *mrb, mrb_value self)
 #ifdef USE_RDWR
   struct iic_msg msg[2];
   struct iic_rdwr_data rdwr;
-  char rdbuf[1024];
 #else
   struct iiccmd cmd;
 #endif
   int error;
   char cmdbuf[MAX_WRITES_SIZE];
+  unsigned char rdbuf[MAX_READ_SIZE];
   int i, size;
 
   mrb_get_args(mrb, "ii|A", &addr, &len, &arr);

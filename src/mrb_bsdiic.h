@@ -8,6 +8,7 @@
 #define MRB_BSDIIC_H
 
 #define MAX_WRITES_SIZE		32
+#define MAX_READ_SIZE		1024
 
 void mrb_mruby_bsdiic_gem_init(mrb_state *mrb);
 
