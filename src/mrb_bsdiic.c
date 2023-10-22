@@ -120,11 +120,14 @@ static mrb_value mrb_bsdiic_read(mrb_state *mrb, mrb_value self)
   error = read(data->fd, rdbuf, len);
 #endif
 
+  if (error) {
+    return mrb_nil_value();
+  }
+
   res = mrb_ary_new(mrb);
   for (i = 0; i < len; ++i) {
     mrb_ary_push(mrb, res, mrb_fixnum_value(rdbuf[i]));
   }
-
   return res;
 }
 
