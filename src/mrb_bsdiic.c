@@ -173,7 +173,7 @@ static mrb_value mrb_bsdiic_write(mrb_state *mrb, mrb_value self)
 #endif
     }
 
-    return mrb_fixnum_value(0);
+    return mrb_fixnum_value(error);
   } else {
 
     mrb_get_args(mrb, "iii", &addr, &reg, &val);
@@ -201,7 +201,7 @@ static mrb_value mrb_bsdiic_write(mrb_state *mrb, mrb_value self)
     error = ioctl(data->fd, I2CSTOP);
 #endif
 
-    return mrb_fixnum_value(0);
+    return mrb_fixnum_value(error);
   }
 }
 
