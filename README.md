@@ -1,4 +1,4 @@
-# mruby-bsdiic   [![Build Status](https://travis-ci.org/yamori813/mruby-bsdiic.svg?branch=master)](https://travis-ci.org/yamori813/mruby-bsdiic)
+# mruby-bsdiic   
 BsdIic class
 
 This is FreeBSD iic support class
