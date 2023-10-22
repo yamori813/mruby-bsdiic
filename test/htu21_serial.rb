@@ -1,4 +1,6 @@
 #!/usr/local/bin/mruby
+# HTU21D Serial number dump script
+# based on https://github.com/TEConnectivity/HTU21D_Generic_C_Driver
 
 def htu21_crc_check value, crc
   
