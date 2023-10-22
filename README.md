@@ -6,15 +6,15 @@ This is FreeBSD iic support class
 support one byte register address and one byte data access and array data
 send.
 
-read(device address, read size, [write data])
-device address : int, read size : int, write data : array
-result : array
+read(device address, read size, [write data])i 
+device address : int, read size : int, write data : array 
+result : array 
 
-write(device address, register address, data)
-device address : int, register address : int, data : int
+write(device address, register address, data) 
+device address : int, register address : int, data : int 
 
-write(device address, write data)
-device address : int, write data : array
+write(device address, write data) 
+device address : int, write data : array 
 
 ## install by mrbgems
 - add conf.gem line to `build_config.rb`
