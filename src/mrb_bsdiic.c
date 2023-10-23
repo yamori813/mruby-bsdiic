@@ -60,7 +60,7 @@ static mrb_value mrb_bsdiic_read(mrb_state *mrb, mrb_value self)
 {
   mrb_bsdiic_data *data = DATA_PTR(self);
   mrb_int addr, len;
-  mrb_value arr, res;
+  mrb_value arg, arr, res;
 #ifdef USE_RDWR
   struct iic_msg msg[2];
   struct iic_rdwr_data rdwr;
@@ -72,10 +72,16 @@ static mrb_value mrb_bsdiic_read(mrb_state *mrb, mrb_value self)
   unsigned char rdbuf[MAX_READ_SIZE];
   int i, size;
 
-  mrb_get_args(mrb, "ii|A", &addr, &len, &arr);
+  mrb_get_args(mrb, "ii|o", &addr, &len, &arg);
 
 #ifdef USE_RDWR
   if (mrb_get_argc(mrb) == 3) {
+    if (mrb_type(arg) == MRB_TT_INTEGER) {
+      arr = mrb_ary_new(mrb);
+      mrb_ary_push(mrb, arr, mrb_fixnum_value(mrb_integer(arg)));
+    } else {
+      arr = arg;
+    }
     size = RARRAY_LEN( arr );
     msg[0].len = size;
     msg[0].buf = cmdbuf;
@@ -100,6 +106,12 @@ static mrb_value mrb_bsdiic_read(mrb_state *mrb, mrb_value self)
   error = ioctl(data->fd, I2CRDWR, &rdwr);
 #else
   if (mrb_get_argc(mrb) == 3) {
+    if (mrb_type(arg) == MRB_TT_INTEGER) {
+      arr = mrb_ary_new(mrb);
+      mrb_ary_push(mrb, arr, mrb_fixnum_value(mrb_integer(arg)));
+    } else {
+      arr = arg;
+    }
     bzero(cmdbuf, sizeof(cmdbuf));
     size = RARRAY_LEN( arr );
     for (i = 0; i < size; ++i)
