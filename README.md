@@ -8,13 +8,15 @@ send.
 
 read(device address, read size, [write data])  
 device address : int, read size : int, write data : array, int  
-result : array  
+result : data(array)  
 
 write(device address, register address, data)  
 device address : int, register address : int, data : int  
+result : write size(int)  
 
 write(device address, write data)  
 device address : int, write data : array  
+result : write size(int)  
 
 ## install by mrbgems
 - add conf.gem line to `build_config.rb`
