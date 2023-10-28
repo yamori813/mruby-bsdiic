@@ -8,7 +8,7 @@ send.
 
 read(device address, read size, [write data])  
 device address : int, read size : int, write data : array, int  
-result : data(array)  
+result : data(array, int) read size equal 1 return int otherwize retrun array  
 
 write(device address, register address, data)  
 device address : int, register address : int, data : int  
