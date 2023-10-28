@@ -32,10 +32,10 @@ end
 ## example
 ```ruby
 t = BsdIic.new(0)
-p t.read(0x50, 1, 2).first
+p t.read(0x50, 1, 2)
 #=> 32
 t.write(0x50, 4, 7)
-p t.read(0x50, 1, 4).first
+p t.read(0x50, 1, 4)
 #=> 7
 t.write(4, [0x33, 0x4d, 0x10])
 ```
