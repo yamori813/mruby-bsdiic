@@ -16,17 +16,18 @@ t = BsdIic.new(0)
 
 t.write(LCDADDR, [0x38, 0x39, 0x14, 0x70, 0x56, 0x6c])
 usleep 200_000
-t.write(LCDADDR, [0x38, 0x0d, 0x01])
+t.write(LCDADDR, [0x38, 0x0d, LCD_CLEARDISPLAY])
 usleep 2_000
 
-t.write(LCDADDR, [0x00, LCD_CLEARDISPLAY])
-usleep 2_000
 arr = [0x40]
 arr += "Hello".bytes
 t.write(LCDADDR, arr)
 
-t.write(LCDADDR, [0x00, LCD_SETDDRAMADDR | 0x40])
-usleep 2_000
-arr = [0x40]
-arr += "mruby".bytes
-t.write(LCDADDR, arr)
+if ARGV.size == 1 then
+  t.write(LCDADDR, [0x00, LCD_SETDDRAMADDR | 0x40])
+  usleep 2_000
+
+  arr = [0x40]
+  arr += ARGV[0].bytes
+  t.write(LCDADDR, arr)
+end
