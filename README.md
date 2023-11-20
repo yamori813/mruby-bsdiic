@@ -44,4 +44,4 @@ t.write(4, [0x33, 0x4d, 0x10])
 under the BSD License:
 - see LICENSE file
 
-This mrbgems is not compatible https://github.com/mruby/microcontroller-peripheral-interface-guide.
+This mrbgems is not compatible mruby/microcontroller-peripheral-interface-guide.
