@@ -43,3 +43,5 @@ t.write(4, [0x33, 0x4d, 0x10])
 ## License
 under the BSD License:
 - see LICENSE file
+
+This mrbgems is not compatible microcontroller-peripheral-interface-guide.
