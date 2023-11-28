@@ -25,7 +25,7 @@ def dispvol(t, v, c)
   usleep 2_000
   sp = " " * (8 - v.to_s.length)
   arr = [0x40]
-  arr += sp.to_s.bytes
+  arr += sp.bytes
   arr += v.to_s.bytes
   t.write(LCDADDR, arr)
   t.write(LCDADDR, [0x00, LCD_SETDDRAMADDR | 0x00 + c])
