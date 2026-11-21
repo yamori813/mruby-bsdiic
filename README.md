@@ -8,7 +8,7 @@ send.
 
 read(device address, read size, [write data])  
 device address : int, read size : int, write data : array, int  
-result : data(array, int) read size equal 1 return int otherwize retrun array  
+result : data(array)
 
 write(device address, register address, data)  
 device address : int, register address : int, data : int  
@@ -33,10 +33,10 @@ end
 ```ruby
 t = BsdIic.new(0)
 p t.read(0x50, 1, 2)
-#=> 32
+#=> [32]
 t.write(0x50, 4, 7)
 p t.read(0x50, 1, 4)
-#=> 7
+#=> [7]
 t.write(4, [0x33, 0x4d, 0x10])
 ```
 
