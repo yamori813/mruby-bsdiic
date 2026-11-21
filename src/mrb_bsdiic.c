@@ -136,15 +136,11 @@ static mrb_value mrb_bsdiic_read(mrb_state *mrb, mrb_value self)
     return mrb_nil_value();
   }
 
-  if (len == 1)
-      return mrb_fixnum_value(rdbuf[0]);
-  else {
-    res = mrb_ary_new(mrb);
-    for (i = 0; i < len; ++i) {
-      mrb_ary_push(mrb, res, mrb_fixnum_value(rdbuf[i]));
-    }
-    return res;
+  res = mrb_ary_new(mrb);
+  for (i = 0; i < len; ++i) {
+    mrb_ary_push(mrb, res, mrb_fixnum_value(rdbuf[i]));
   }
+  return res;
 }
 
 static mrb_value mrb_bsdiic_write(mrb_state *mrb, mrb_value self)
