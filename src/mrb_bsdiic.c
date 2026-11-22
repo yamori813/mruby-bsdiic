@@ -233,7 +233,7 @@ void mrb_mruby_bsdiic_gem_init(mrb_state *mrb)
     mrb_define_method(mrb, bsdiic, "initialize", mrb_bsdiic_init, MRB_ARGS_REQ(1));
     mrb_define_method(mrb, bsdiic, "read", mrb_bsdiic_read, MRB_ARGS_ARG(2, 1));
     mrb_define_method(mrb, bsdiic, "write", mrb_bsdiic_write, MRB_ARGS_ARG(2, 1));
-    mrb_define_alias(mrb, bsdiic, "i2read", "read");
+    mrb_define_alias(mrb, bsdiic, "i2cread", "read");
     mrb_define_alias(mrb, bsdiic, "i2cwrite", "write");
     DONE;
 }
